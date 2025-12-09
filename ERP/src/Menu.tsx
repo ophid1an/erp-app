@@ -539,8 +539,44 @@ const mergeActiveRoutes = (items: MenuItem[]): MenuItem[] =>
     }
   })
 
-const classNames = (...values: Array<string | undefined | false>) =>
-  values.filter(Boolean).join(' ')
+const cn = (...values: Array<string | undefined | false>) => values.filter(Boolean).join(' ')
+
+const Badge = ({ children }: { children: React.ReactNode }) => (
+  <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-slate-600">
+    {children}
+  </span>
+)
+
+const ChevronIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={cn('h-4 w-4 text-slate-500 transition group-hover:text-indigo-500', className)}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="m6 9 6 6 6-6" />
+  </svg>
+)
+
+const ArrowIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={cn('h-4 w-4 text-slate-400 group-hover:text-indigo-500', className)}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M7 17 17 7" />
+    <path d="M7 7h10v10" />
+  </svg>
+)
 
 const getAdvancedMenu = (environment: string): MenuItem[] => {
   const menu = cloneMenu(advancedMenu)
@@ -585,66 +621,120 @@ const Menu = ({
   const canSeeItem = (role: string) => userRoles.includes(role)
   const isActive = (item: MenuItem) => (currentRoute ? item.active.includes(currentRoute) : false)
   const linkHref = (item: MenuItem) => item.externalLink || resolveRoute(item.route ?? '#')
+  const visibleSections = menu.filter((section) => canSeeItem(section.role))
 
   return (
-    <nav aria-label="Main navigation">
-      <ul className="navbar-nav mr-auto">
-        {menu.filter((section) => canSeeItem(section.role)).map((section) => {
-          const sectionId = section.id || section.name.replace(/\s+/g, '-').toLowerCase()
+    <div className="relative w-full">
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-sky-50"
+        aria-hidden="true"
+      />
 
-          if (section.items?.length) {
+      <div className="relative mx-auto max-w-6xl space-y-4 rounded-3xl border border-slate-100 bg-white/70 p-6 shadow-xl backdrop-blur">
+        <header className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
+              Navigation
+            </p>
+            <h2 className="text-2xl font-bold text-slate-900">Menu</h2>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Badge>{featureVersion} mode</Badge>
+            <Badge>{environment} env</Badge>
+          </div>
+        </header>
+
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {visibleSections.map((section) => {
+            const sectionId = section.id || section.name.replace(/\s+/g, '-').toLowerCase()
+            const hasChildren = !!section.items?.length
+            const sectionActive = isActive(section)
+
             return (
-              <li
+              <div
                 key={sectionId}
-                className={classNames('nav-item dropdown', isActive(section) && 'active')}
+                className={cn(
+                  'group relative overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm ring-1 ring-slate-100 transition hover:-translate-y-0.5 hover:shadow-lg',
+                  sectionActive && 'ring-2 ring-indigo-100 bg-indigo-50/60',
+                  ...(section.attribute ?? [])
+                )}
               >
-                <a
-                  id={`menu-${sectionId}`}
-                  className={classNames('nav-link dropdown-toggle', ...(section.attribute ?? []))}
-                  href="#"
-                  data-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  {section.name}
-                </a>
-
-                <div className="dropdown-menu" aria-labelledby={`menu-${sectionId}`}>
-                  {section.items
-                    .filter((child) => canSeeItem(child.role))
-                    .map((child) => (
-                      <a
-                        key={child.name}
-                        className={classNames('dropdown-item', ...(child.attribute ?? []))}
-                        target={child.target || undefined}
-                        rel={child.target === '_blank' ? 'noreferrer' : undefined}
-                        href={linkHref(child)}
-                      >
-                        {child.name}
-                      </a>
-                    ))}
+                <div className="flex items-start justify-between px-4 py-3">
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
+                      {section.id ?? 'Section'}
+                    </p>
+                    <p className="text-lg font-semibold text-slate-900">{section.name}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge>{section.role.replace('ROLE_', '')}</Badge>
+                    {hasChildren && <ChevronIcon className="group-hover:translate-y-[1px]" />}
+                  </div>
                 </div>
-              </li>
-            )
-          }
 
-          return (
-            <li
-              key={sectionId}
-              className={classNames('nav-item', isActive(section) && 'active')}
-            >
-              <a
-                className={classNames('nav-link', ...(section.attribute ?? []))}
-                href={linkHref(section)}
-                target={section.target || undefined}
-                rel={section.target === '_blank' ? 'noreferrer' : undefined}
-              >
-                {section.name}
-              </a>
-            </li>
-          )
-        })}
-      </ul>
-    </nav>
+                <div className="border-t border-slate-100" />
+
+                <div className="p-3">
+                  {hasChildren ? (
+                    <div className="space-y-1">
+                      {section.items
+                        ?.filter((child) => canSeeItem(child.role))
+                        .map((child) => {
+                          const active = isActive(child)
+                          return (
+                            <a
+                              key={child.name}
+                              className={cn(
+                                'group flex items-center justify-between rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200',
+                                active
+                                  ? 'bg-indigo-50 text-indigo-700 ring-1 ring-indigo-100 shadow-sm'
+                                  : 'hover:bg-slate-50',
+                                ...(child.attribute ?? [])
+                              )}
+                              target={child.target || undefined}
+                              rel={child.target === '_blank' ? 'noreferrer' : undefined}
+                              href={linkHref(child)}
+                            >
+                              <span className="flex flex-col items-start">
+                                <span>{child.name}</span>
+                                <span className="text-xs font-normal text-slate-500">
+                                  {child.externalLink ? child.externalLink : child.route}
+                                </span>
+                              </span>
+                              <ArrowIcon />
+                            </a>
+                          )
+                        })}
+                    </div>
+                  ) : (
+                    <a
+                      className={cn(
+                        'group flex items-center justify-between rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200',
+                        sectionActive &&
+                          'bg-indigo-50 text-indigo-700 ring-1 ring-indigo-100 shadow-sm',
+                        ...(section.attribute ?? [])
+                      )}
+                      href={linkHref(section)}
+                      target={section.target || undefined}
+                      rel={section.target === '_blank' ? 'noreferrer' : undefined}
+                    >
+                      <span className="flex flex-col items-start">
+                        <span>{section.name}</span>
+                        <span className="text-xs font-normal text-slate-500">
+                          {section.externalLink ? section.externalLink : section.route}
+                        </span>
+                      </span>
+                      <ArrowIcon />
+                    </a>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </div>
   )
 }
 
