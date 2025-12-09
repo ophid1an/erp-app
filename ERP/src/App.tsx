@@ -1,34 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import Menu from './Menu'
+
+const roles = [
+  'ROLE_MANAGER',
+  'ROLE_ACCOUNTING_ASSISTANT',
+  'ROLE_EMPLOYEE',
+  'ROLE_HR',
+]
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <main className="min-h-screen bg-slate-50 p-6">
+      <div className="mx-auto max-w-6xl space-y-6">
+        <header className="space-y-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
+            Demo
+          </p>
+          <h1 className="text-3xl font-bold text-slate-900">
+            React Menu (powered by Menu.tsx)
+          </h1>
+          <p className="text-slate-600">
+            Example usage with full roles; replace with your own role list, feature version,
+            current route, and resolver.
+          </p>
+        </header>
+
+        <Menu
+          featureVersion="Advanced"
+          currentRoute="AppTransactionIndex"
+          userRoles={roles}
+          environment="dev"
+          resolveRoute={(route) => (route ? `/route/${route}` : '#')}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </main>
   )
 }
 
