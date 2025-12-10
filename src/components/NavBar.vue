@@ -7,14 +7,10 @@ import Button from './ui/Button.vue'
     <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
       <div class="flex items-center gap-3">
         <img
-          src="https://codeseed.gr/wp-content/uploads/2021/05/logo-codeseed.svg"
+          src="images.ctfassets.net/ynb9m39kb3he/5CczP1UeHItbQPNjd5hzBu/7739fe9c4fb340323c941583dd778695/codeseed-logo-dark.svg"
           alt="Codeseed logo"
           class="h-8 w-auto"
         />
-        <div>
-          <p class="text-sm font-semibold text-slate-900">Codeseed ERP</p>
-          <p class="text-xs text-slate-500">Vue + Tailwind</p>
-        </div>
       </div>
 
       <nav class="flex w-full flex-wrap items-center gap-3 overflow-x-auto text-sm font-semibold text-slate-700 sm:flex">
