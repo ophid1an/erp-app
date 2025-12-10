@@ -133,7 +133,7 @@ const flatLinks = computed(() => navGroups.flatMap((group) => group.links))
             :key="group.label"
             class="rounded-lg border border-slate-200 bg-white shadow-sm transition hover:border-teal-200"
           >
-            <details class="group open:shadow-md">
+            <details class="group relative overflow-visible open:shadow-md">
               <summary
                 class="flex cursor-pointer items-center justify-between gap-2 px-3 py-2 text-sm font-semibold text-slate-800 transition group-open:text-teal-700"
               >
@@ -151,8 +151,8 @@ const flatLinks = computed(() => navGroups.flatMap((group) => group.links))
                   />
                 </svg>
               </summary>
-              <div class="px-3 pb-3">
-                <div class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
+              <div class="absolute left-0 right-0 top-full z-30 hidden rounded-lg border border-slate-200 bg-white shadow-xl ring-1 ring-black/5 group-open:block">
+                <div class="flex flex-col gap-1 px-3 py-3 text-sm font-semibold text-slate-700">
                   <RouterLink
                     v-for="link in group.links"
                     :key="link.to"
