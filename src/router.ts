@@ -1,11 +1,29 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MenuDemo from './views/MenuDemo.vue'
+import Login from './views/Login.vue'
+import ResetPassword from './views/ResetPassword.vue'
+import EmployeesList from './views/EmployeesList.vue'
 
 const routes = [
   {
     path: '/',
     name: 'menu',
     component: MenuDemo,
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login,
+  },
+  {
+    path: '/reset',
+    name: 'reset',
+    component: ResetPassword,
+  },
+  {
+    path: '/employees',
+    name: 'employees',
+    component: EmployeesList,
   },
 ]
 
