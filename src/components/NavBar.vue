@@ -1,5 +1,79 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue'
 import Button from './ui/Button.vue'
+
+const navGroups = [
+  {
+    label: 'Overview',
+    links: [
+      { label: 'Dashboard', to: '/' },
+      { label: 'Reports', to: '/reports' },
+      { label: 'Year overview', to: '/year-overview' },
+      { label: 'Metrics', to: '/metrics' },
+      { label: 'Statistics', to: '/statistics' },
+    ],
+  },
+  {
+    label: 'Finance',
+    links: [
+      { label: 'Transactions', to: '/transactions' },
+      { label: 'Invoices', to: '/invoices' },
+      { label: 'Expenses', to: '/expenses' },
+      { label: 'Suppliers', to: '/suppliers' },
+      { label: 'Expense approvals', to: '/expense-approvals' },
+      { label: 'Accounts', to: '/accounts' },
+      { label: 'Tax', to: '/tax' },
+      { label: 'Loans', to: '/loans' },
+      { label: 'Assets', to: '/assets' },
+    ],
+  },
+  {
+    label: 'People',
+    links: [
+      { label: 'Clients', to: '/clients' },
+      { label: 'Contacts', to: '/contacts' },
+      { label: 'Employees', to: '/employees' },
+      { label: 'Vacancies', to: '/vacancies' },
+      { label: 'Payroll', to: '/payroll' },
+      { label: 'Worklog', to: '/worklog' },
+      { label: 'Leave book', to: '/leave-book' },
+      { label: 'PT Board', to: '/pt-board' },
+    ],
+  },
+  {
+    label: 'Operations',
+    links: [
+      { label: 'Trips', to: '/trips' },
+      { label: 'Offices', to: '/offices' },
+      { label: 'Office', to: '/office' },
+      { label: 'Decisions', to: '/decisions' },
+      { label: 'Marketplace', to: '/marketplace' },
+      { label: 'Commands', to: '/commands' },
+      { label: 'Memos', to: '/memos' },
+      { label: 'Menu', to: '/menu' },
+    ],
+  },
+  {
+    label: 'Resources',
+    links: [
+      { label: 'Static files', to: '/static-files' },
+      { label: 'API docs', to: '/api-docs' },
+      { label: 'Random pick', to: '/random-pick' },
+    ],
+  },
+  {
+    label: 'Account',
+    links: [
+      { label: 'Settings', to: '/settings' },
+      { label: 'Change password', to: '/change-password' },
+      { label: 'Login', to: '/login' },
+      { label: 'Reset', to: '/reset' },
+    ],
+  },
+]
+
+const isExpanded = ref(false)
+const flatLinks = computed(() => navGroups.flatMap((group) => group.links))
 </script>
 
 <template>
@@ -13,45 +87,87 @@ import Button from './ui/Button.vue'
         />
       </div>
 
-      <nav class="flex w-full flex-wrap items-center gap-3 overflow-x-auto text-sm font-semibold text-slate-700 sm:flex">
-        <RouterLink to="/" class="hover:text-teal-600">Dashboard</RouterLink>
-        <RouterLink to="/transactions" class="hover:text-teal-600">Transactions</RouterLink>
-        <RouterLink to="/invoices" class="hover:text-teal-600">Invoices</RouterLink>
-        <RouterLink to="/clients" class="hover:text-teal-600">Clients</RouterLink>
-        <RouterLink to="/expenses" class="hover:text-teal-600">Expenses</RouterLink>
-        <RouterLink to="/suppliers" class="hover:text-teal-600">Suppliers</RouterLink>
-        <RouterLink to="/payroll" class="hover:text-teal-600">Payroll</RouterLink>
-        <RouterLink to="/reports" class="hover:text-teal-600">Reports</RouterLink>
-        <RouterLink to="/contacts" class="hover:text-teal-600">Contacts</RouterLink>
-        <RouterLink to="/memos" class="hover:text-teal-600">Memos</RouterLink>
-        <RouterLink to="/offices" class="hover:text-teal-600">Offices</RouterLink>
-        <RouterLink to="/decisions" class="hover:text-teal-600">Decisions</RouterLink>
-        <RouterLink to="/expense-approvals" class="hover:text-teal-600">Expense approvals</RouterLink>
-        <RouterLink to="/accounts" class="hover:text-teal-600">Accounts</RouterLink>
-        <RouterLink to="/year-overview" class="hover:text-teal-600">Year overview</RouterLink>
-        <RouterLink to="/tax" class="hover:text-teal-600">Tax</RouterLink>
-        <RouterLink to="/loans" class="hover:text-teal-600">Loans</RouterLink>
-        <RouterLink to="/worklog" class="hover:text-teal-600">Worklog</RouterLink>
-        <RouterLink to="/assets" class="hover:text-teal-600">Assets</RouterLink>
-        <RouterLink to="/trips" class="hover:text-teal-600">Trips</RouterLink>
-        <RouterLink to="/leave-book" class="hover:text-teal-600">Leave book</RouterLink>
-        <RouterLink to="/pt-board" class="hover:text-teal-600">PT Board</RouterLink>
-        <RouterLink to="/office" class="hover:text-teal-600">Office</RouterLink>
-        <RouterLink to="/random-pick" class="hover:text-teal-600">Random pick</RouterLink>
-        <RouterLink to="/vacancies" class="hover:text-teal-600">Vacancies</RouterLink>
-        <RouterLink to="/statistics" class="hover:text-teal-600">Statistics</RouterLink>
-        <RouterLink to="/metrics" class="hover:text-teal-600">Metrics</RouterLink>
-        <RouterLink to="/marketplace" class="hover:text-teal-600">Marketplace</RouterLink>
-        <RouterLink to="/static-files" class="hover:text-teal-600">Static files</RouterLink>
-        <RouterLink to="/commands" class="hover:text-teal-600">Commands</RouterLink>
-        <RouterLink to="/settings" class="hover:text-teal-600">Settings</RouterLink>
-        <RouterLink to="/api-docs" class="hover:text-teal-600">API docs</RouterLink>
-        <RouterLink to="/change-password" class="hover:text-teal-600">Change password</RouterLink>
-        <RouterLink to="/menu" class="hover:text-teal-600">Menu</RouterLink>
-        <RouterLink to="/employees" class="hover:text-teal-600">Employees</RouterLink>
-        <RouterLink to="/login" class="hover:text-teal-600">Login</RouterLink>
-        <RouterLink to="/reset" class="hover:text-teal-600">Reset</RouterLink>
-      </nav>
+      <div class="flex w-full flex-col gap-3">
+        <div class="flex items-center justify-between gap-3">
+          <button
+            type="button"
+            class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-teal-200 hover:text-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            @click="isExpanded = !isExpanded"
+          >
+            <span v-if="isExpanded">Collapse menu</span>
+            <span v-else>Expand all</span>
+            <svg
+              class="h-4 w-4 transition"
+              :class="isExpanded ? 'rotate-180 text-teal-600' : 'text-slate-500'"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 3a1 1 0 01.707.293l5 5a1 1 0 01-1.414 1.414L10 5.414 5.707 9.707A1 1 0 014.293 8.293l5-5A1 1 0 0110 3z"
+                clip-rule="evenodd"
+              />
+              <path
+                fill-rule="evenodd"
+                d="M10 11a1 1 0 01.707.293l5 5a1 1 0 01-1.414 1.414L10 13.414l-4.293 4.293A1 1 0 014.293 15.293l5-5A1 1 0 0110 11z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <nav v-if="isExpanded" class="flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-700">
+          <RouterLink
+            v-for="link in flatLinks"
+            :key="link.to"
+            :to="link.to"
+            class="rounded-full border border-slate-200 bg-white px-3 py-1 transition hover:border-teal-200 hover:text-teal-700"
+          >
+            {{ link.label }}
+          </RouterLink>
+        </nav>
+
+        <div v-else class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          <section
+            v-for="group in navGroups"
+            :key="group.label"
+            class="rounded-lg border border-slate-200 bg-white shadow-sm transition hover:border-teal-200"
+          >
+            <details class="group open:shadow-md">
+              <summary
+                class="flex cursor-pointer items-center justify-between gap-2 px-3 py-2 text-sm font-semibold text-slate-800 transition group-open:text-teal-700"
+              >
+                <span>{{ group.label }}</span>
+                <svg
+                  class="h-4 w-4 transition group-open:rotate-180 group-open:text-teal-600"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 12a1 1 0 01-.707-.293l-5-5A1 1 0 015.707 5.293L10 9.586l4.293-4.293A1 1 0 1115.707 6.707l-5 5A1 1 0 0110 12z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </summary>
+              <div class="px-3 pb-3">
+                <div class="flex flex-col gap-1 text-sm font-semibold text-slate-700">
+                  <RouterLink
+                    v-for="link in group.links"
+                    :key="link.to"
+                    :to="link.to"
+                    class="rounded-md px-2 py-1 transition hover:bg-teal-50 hover:text-teal-700"
+                  >
+                    {{ link.label }}
+                  </RouterLink>
+                </div>
+              </div>
+            </details>
+          </section>
+        </div>
+      </div>
 
       <div class="flex items-center gap-2">
         <Button as="a" variant="outline" size="sm" href="/login">Sign in</Button>
