@@ -21,6 +21,11 @@ import Contacts from './views/Contacts.vue'
 import Memos from './views/Memos.vue'
 import Offices from './views/Offices.vue'
 import Decisions from './views/Decisions.vue'
+import ExpenseApprovals from './views/ExpenseApprovals.vue'
+import Accounts from './views/Accounts.vue'
+import YearOverview from './views/YearOverview.vue'
+import Tax from './views/Tax.vue'
+import Loans from './views/Loans.vue'
 
 const routes = [
   {
@@ -117,6 +122,31 @@ const routes = [
     path: '/decisions',
     name: 'decisions',
     component: Decisions,
+  },
+  {
+    path: '/expense-approvals',
+    name: 'expense-approvals',
+    component: ExpenseApprovals,
+  },
+  {
+    path: '/accounts',
+    name: 'accounts',
+    component: Accounts,
+  },
+  {
+    path: '/year-overview',
+    name: 'year-overview',
+    component: YearOverview,
+  },
+  {
+    path: '/tax',
+    name: 'tax',
+    component: Tax,
+  },
+  {
+    path: '/loans',
+    name: 'loans',
+    component: Loans,
   },
   {
     path: '/login',
