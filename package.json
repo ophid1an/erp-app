@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "lint": "eslint .",
+    "prettier:check": "prettier --check \"src/**/*.{ts,js,vue,css,md,json}\" \"*.{json,md}\" \".github/**/*.yml\"",
+    "prettier:write": "prettier --write \"src/**/*.{ts,js,vue,css,md,json}\" \"*.{json,md}\" \".github/**/*.yml\"",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -22,6 +24,7 @@
     "eslint-plugin-vue": "^9.33.0",
     "globals": "^16.5.0",
     "postcss": "^8.4.49",
+    "prettier": "^3.7.4",
     "tailwindcss": "^3.4.14",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
