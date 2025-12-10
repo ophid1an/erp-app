@@ -39,11 +39,27 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Run Prettier check
+        id: prettier_check
         if: steps.changed.outputs.changed_files != ''
+        continue-on-error: true
         run: |
           echo "Checking files:"
           printf '%s\n' "${{ steps.changed.outputs.changed_files }}"
           npx prettier --check ${{ steps.changed.outputs.changed_files }}
+
+      - name: Generate Prettier patch (on failure)
+        if: steps.changed.outputs.changed_files != '' && steps.prettier_check.outcome == 'failure'
+        run: |
+          npx prettier --write ${{ steps.changed.outputs.changed_files }}
+          git diff --patch > prettier-fixes.patch
+          echo "patch_path=prettier-fixes.patch" >> "$GITHUB_ENV"
+
+      - name: Upload Prettier patch artifact
+        if: env.patch_path != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: prettier-fixes
+          path: ${{ env.patch_path }}
 
       - name: Skip Prettier (no matching changes)
         if: steps.changed.outputs.changed_files == ''
@@ -57,10 +73,13 @@ jobs:
             if [ "${{ steps.changed.outputs.changed_files }}" = "" ]; then
               echo "- Skipped: no matching files changed."
             else
-              if [ "${{ job.status }}" = "success" ]; then
+              if [ "${{ steps.prettier_check.outcome || 'success' }}" = "success" ]; then
                 echo "- ✅ Passed on changed files."
               else
-                echo "- ❌ Failed. Run \`npm run prettier:write\` locally."
+                echo "- ❌ Failed. Run \`npm run prettier:write\` locally or apply the attached patch artifact."
+                if [ -n "${{ env.patch_path }}" ]; then
+                  echo "  - Patch artifact: prettier-fixes"
+                fi
               fi
               echo ""
               echo "Changed files checked:"
@@ -69,6 +88,10 @@ jobs:
               echo '```'
             fi
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail if Prettier failed
+        if: steps.prettier_check.outcome == 'failure'
+        run: exit 1
 
   build-php-image:
     name: Build-php-image
