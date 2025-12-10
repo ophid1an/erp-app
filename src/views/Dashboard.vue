@@ -65,9 +65,9 @@ const graphBars = [
             :key="bar.label"
             class="flex flex-col items-center justify-end gap-2 text-xs text-slate-600"
           >
-            <div class="w-full rounded-lg bg-indigo-100">
+            <div class="w-full rounded-lg bg-teal-100">
               <div
-                class="rounded-lg bg-indigo-500 transition-all"
+                class="rounded-lg bg-teal-500 transition-all"
                 :style="{ height: `${bar.value}px`, minHeight: '12px' }"
               />
             </div>
@@ -88,11 +88,11 @@ const graphBars = [
           <div
             v-for="item in shortcuts"
             :key="item.title"
-            class="rounded-xl border border-slate-100 p-3 hover:border-indigo-100 hover:bg-indigo-50/40 transition"
+            class="rounded-xl border border-slate-100 p-3 hover:border-teal-100 hover:bg-teal-50/40 transition"
           >
             <p class="text-sm font-semibold text-slate-900">{{ item.title }}</p>
             <p class="text-xs text-slate-600">{{ item.description }}</p>
-            <Button variant="ghost" size="sm" class="mt-2 px-0 text-indigo-600">{{ item.cta }}</Button>
+            <Button variant="ghost" size="sm" class="mt-2 px-0 text-teal-600">{{ item.cta }}</Button>
           </div>
         </div>
       </Card>

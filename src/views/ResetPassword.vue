@@ -29,7 +29,7 @@ const onSubmit = (event: Event) => {
 
         <Button type="submit" class="w-full">Send reset link</Button>
         <p class="text-center text-sm text-slate-500">
-          Remembered it? <RouterLink to="/login" class="text-indigo-600 hover:text-indigo-500">Back to login</RouterLink>
+          Remembered it? <RouterLink to="/login" class="text-teal-600 hover:text-teal-500">Back to login</RouterLink>
         </p>
       </form>
     </Card>

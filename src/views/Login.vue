@@ -40,15 +40,15 @@ const onSubmit = (event: Event) => {
 
         <div class="flex items-center justify-between text-sm">
           <label class="flex items-center gap-2 text-slate-700">
-            <input type="checkbox" class="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-200" />
+            <input type="checkbox" class="h-4 w-4 rounded border-slate-300 text-teal-600 focus:ring-teal-200" />
             Remember me
           </label>
-          <RouterLink to="/reset" class="text-indigo-600 hover:text-indigo-500">Forgot password?</RouterLink>
+          <RouterLink to="/reset" class="text-teal-600 hover:text-teal-500">Forgot password?</RouterLink>
         </div>
 
         <Button type="submit" class="w-full">Sign in</Button>
         <p class="text-center text-sm text-slate-500">
-          Need an account? <a class="text-indigo-600 hover:text-indigo-500" href="#">Request access</a>
+          Need an account? <a class="text-teal-600 hover:text-teal-500" href="#">Request access</a>
         </p>
       </form>
     </Card>

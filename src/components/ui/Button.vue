@@ -19,12 +19,12 @@ const props = withDefaults(
 
 const classes = computed(() => {
   const base =
-    'inline-flex items-center justify-center rounded-md font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200 disabled:opacity-60 disabled:pointer-events-none'
+    'inline-flex items-center justify-center rounded-md font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-200 disabled:opacity-60 disabled:pointer-events-none'
 
   const variants: Record<Variant, string> = {
-    default: 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-sm',
-    outline: 'border border-slate-200 text-slate-900 hover:bg-slate-50',
-    ghost: 'text-slate-700 hover:bg-slate-100',
+    default: 'bg-teal-600 text-white hover:bg-teal-500 shadow-sm',
+    outline: 'border border-teal-200 text-teal-800 hover:bg-teal-50',
+    ghost: 'text-teal-700 hover:bg-teal-50',
   }
 
   const sizes: Record<Size, string> = {

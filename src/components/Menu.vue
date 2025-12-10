@@ -592,7 +592,7 @@ const linkHref = (item: MenuItem) => item.externalLink || props.resolveRoute(ite
 <template>
   <div class="relative w-full">
     <div
-      class="pointer-events-none absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-sky-50"
+      class="pointer-events-none absolute inset-0 bg-gradient-to-br from-teal-50 via-white to-sky-50"
       aria-hidden="true"
     />
 
@@ -625,7 +625,7 @@ const linkHref = (item: MenuItem) => item.externalLink || props.resolveRoute(ite
           :key="section.id || section.name"
           :class="cn(
             'group relative overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm ring-1 ring-slate-100 transition hover:-translate-y-0.5 hover:shadow-lg',
-            isActive(section) && 'ring-2 ring-indigo-100 bg-indigo-50/60',
+            isActive(section) && 'ring-2 ring-teal-100 bg-teal-50/60',
             section.attribute ?? [],
           )"
         >
@@ -644,7 +644,7 @@ const linkHref = (item: MenuItem) => item.externalLink || props.resolveRoute(ite
               </span>
               <svg
                 v-if="section.items?.length"
-                class="h-4 w-4 text-slate-500 transition group-hover:text-indigo-500"
+                class="h-4 w-4 text-slate-500 transition group-hover:text-teal-500"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -667,9 +667,9 @@ const linkHref = (item: MenuItem) => item.externalLink || props.resolveRoute(ite
                   v-for="child in section.items.filter((child) => props.userRoles.includes(child.role))"
                   :key="child.name"
                   :class="cn(
-                    'group flex items-center justify-between rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200',
+                    'group flex items-center justify-between rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-200',
                     isActive(child)
-                      ? 'bg-indigo-50 text-indigo-700 ring-1 ring-indigo-100 shadow-sm'
+                      ? 'bg-teal-50 text-teal-700 ring-1 ring-teal-100 shadow-sm'
                       : 'hover:bg-slate-50',
                     child.attribute ?? [],
                   )"
@@ -684,7 +684,7 @@ const linkHref = (item: MenuItem) => item.externalLink || props.resolveRoute(ite
                     </span>
                   </span>
                   <svg
-                    class="h-4 w-4 text-slate-400 group-hover:text-indigo-500"
+                    class="h-4 w-4 text-slate-400 group-hover:text-teal-500"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -702,8 +702,8 @@ const linkHref = (item: MenuItem) => item.externalLink || props.resolveRoute(ite
             <template v-else>
               <a
                 :class="cn(
-                  'group flex items-center justify-between rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200',
-                  isActive(section) && 'bg-indigo-50 text-indigo-700 ring-1 ring-indigo-100 shadow-sm',
+                  'group flex items-center justify-between rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-200',
+                  isActive(section) && 'bg-teal-50 text-teal-700 ring-1 ring-teal-100 shadow-sm',
                   section.attribute ?? [],
                 )"
                 :href="linkHref(section)"
@@ -717,7 +717,7 @@ const linkHref = (item: MenuItem) => item.externalLink || props.resolveRoute(ite
                   </span>
                 </span>
                 <svg
-                  class="h-4 w-4 text-slate-400 group-hover:text-indigo-500"
+                  class="h-4 w-4 text-slate-400 group-hover:text-teal-500"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
