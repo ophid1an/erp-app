@@ -13,19 +13,6 @@ const onSubmit = (event: Event) => {
 
 <template>
   <section class="grid gap-6 lg:grid-cols-2">
-    <div class="space-y-4">
-      <p class="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">Authentication</p>
-      <h1 class="text-3xl font-bold">Welcome back</h1>
-      <p class="text-slate-600">
-        Sign in to the ERP portal using your work email. Password reset is available from the reset page.
-      </p>
-      <div class="flex flex-wrap gap-2">
-        <Badge>Secure</Badge>
-        <Badge>SSO ready</Badge>
-        <Badge>Role aware</Badge>
-      </div>
-    </div>
-
     <Card class="p-6">
       <form class="space-y-4" @submit="onSubmit">
         <div class="space-y-2">

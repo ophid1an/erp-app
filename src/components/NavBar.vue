@@ -72,7 +72,7 @@ const navGroups = [
   },
 ]
 
-const isExpanded = ref(false)
+const isExpanded = ref(true)
 const flatLinks = computed(() => navGroups.flatMap((group) => group.links))
 </script>
 
@@ -88,14 +88,13 @@ const flatLinks = computed(() => navGroups.flatMap((group) => group.links))
       </div>
 
       <div class="flex w-full flex-col gap-3">
-        <div class="flex items-center justify-between gap-3">
+        <div class="flex flex-row-reverse items-center justify-between gap-3">
           <button
             type="button"
-            class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-teal-200 hover:text-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            class="inline-flex h-9 w-9 items-center justify-center border-slate-200 bg-white text-slate-700 shadow-sm transition hover:border-teal-200 hover:text-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
             @click="isExpanded = !isExpanded"
+            :aria-label="isExpanded ? 'Collapse menu' : 'Expand all'"
           >
-            <span v-if="isExpanded">Collapse menu</span>
-            <span v-else>Expand all</span>
             <svg
               class="h-4 w-4 transition"
               :class="isExpanded ? 'rotate-180 text-teal-600' : 'text-slate-500'"
