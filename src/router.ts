@@ -17,6 +17,10 @@ import Trips from './views/Trips.vue'
 import StaticFiles from './views/StaticFiles.vue'
 import Commands from './views/Commands.vue'
 import Settings from './views/Settings.vue'
+import Contacts from './views/Contacts.vue'
+import Memos from './views/Memos.vue'
+import Offices from './views/Offices.vue'
+import Decisions from './views/Decisions.vue'
 
 const routes = [
   {
@@ -93,6 +97,26 @@ const routes = [
     path: '/settings',
     name: 'settings',
     component: Settings,
+  },
+  {
+    path: '/contacts',
+    name: 'contacts',
+    component: Contacts,
+  },
+  {
+    path: '/memos',
+    name: 'memos',
+    component: Memos,
+  },
+  {
+    path: '/offices',
+    name: 'offices',
+    component: Offices,
+  },
+  {
+    path: '/decisions',
+    name: 'decisions',
+    component: Decisions,
   },
   {
     path: '/login',
