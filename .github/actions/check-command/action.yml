@@ -1,0 +1,56 @@
+name: check command
+
+inputs:
+  command_id:
+    description: 'Command of the id to check'
+    required: true
+  instance_id:
+    description: 'Instance id the command was run on'
+    required: true
+
+outputs:
+  status:
+    description: "The status of the completed command"
+    value: ${{ steps.command-check.outputs.status }}
+  standard_error_content:
+    description: "The response content"
+    value: ${{ steps.command-check.outputs.standard_error_content }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check command
+      id: command-check
+      shell: bash
+      run: |
+        max_retries=50
+        retry_delay=10  # Delay in seconds
+        counter=0
+        while [ $counter -lt $max_retries ]; do
+          echo "Sleeping for $retry_delay..."
+          sleep $retry_delay
+          echo "Fetching the command status..."
+          command_output=$(aws ssm get-command-invocation --command-id "${{ inputs.command_id }}" --instance-id "${{ inputs.instance_id }}")
+          echo "Output received: $command_output"
+          
+          command_status=$(echo "$command_output" | jq -r '.Status')
+          echo "Command Status: $command_status"
+    
+          if [[ "$command_status" == "InProgress" ]]; then
+            counter=$((counter + 1))
+          else
+            command_standard_error_content=$(echo "$command_output" | jq -r '.StandardErrorContent')
+            command_standard_error_content=${command_standard_error_content//$'\n'/' '}
+            echo "status=$command_status" >> $GITHUB_OUTPUT
+            echo "standard_error_content=$command_standard_error_content" >> $GITHUB_OUTPUT
+            break
+          fi
+        done
+        if [ $counter -eq $max_retries ]; then
+          echo "Reached maximum retry attempts. Command remains in progress."
+          exit 1
+        elif [ "$command_status" != "Success" ]; then
+          echo "Command failed with status: $command_status"
+          echo "Reason: $command_standard_error_content"
+          exit 1
+        fi

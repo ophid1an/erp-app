@@ -1,0 +1,17 @@
+name: Deploy to ACC
+
+on:
+  workflow_dispatch
+
+jobs:
+
+  update-acc-db:
+    uses: ./.github/workflows/update-acc-db.yml
+    secrets: inherit
+
+  deployment-template:
+    uses: ./.github/workflows/deployment-template.yml
+    needs: update-acc-db
+    with:
+      instance_id: "i-096664bf9cf21859c"  # ACC instance ID
+    secrets: inherit

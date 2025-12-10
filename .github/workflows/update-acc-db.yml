@@ -1,0 +1,103 @@
+name: Update acc db
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+env:
+  AWS_REGION: "eu-west-3"
+  AWS_ROLE: "arn:aws:iam::542189061124:role/GithubErpDeployer"
+  CONTAINER_NAME: "erp-server"
+  PROD_INSTANCE_ID: "i-086aef83fafc36551"
+  ACC_INSTANCE_ID: "i-096664bf9cf21859c"
+
+permissions:
+  id-token: write 
+  contents: read 
+
+jobs:
+  update:
+    name: Update-acc-db
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_ROLE }}
+          role-session-name: DeployERPSession
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Empty ACC db
+        run: |
+          command_id=$(aws ssm send-command \
+            --instance-ids "${{ env.ACC_INSTANCE_ID }}" \
+            --document-name "AWS-RunShellScript" \
+            --comment "Empty ACC db" \
+            --parameters commands='[
+              "docker exec ${{ env.CONTAINER_NAME }} sh -c \"bin/console doctrine:schema:drop --full-database --force\""
+            ]' --query 'Command.CommandId' --output text)
+
+          echo "empty_command_id=$command_id" >> $GITHUB_ENV
+
+      - name: Check empty acc db command status
+        uses: ./.github/actions/check-command
+        with:
+          instance_id: "${{ env.ACC_INSTANCE_ID }}"
+          command_id: "${{ env.empty_command_id }}"
+          
+      - name: Recreate the acc DB
+        run: |
+          command_id=$(aws ssm send-command \
+            --instance-ids "${{ env.PROD_INSTANCE_ID }}" \
+            --document-name "AWS-RunShellScript" \
+            --comment "Dropping and recreating the acc db" \
+            --parameters commands='[
+              "docker cp ${{ env.CONTAINER_NAME }}:/var/www/html/etc/acceptance-update-db.sh ~",
+              "chmod +x /root/acceptance-update-db.sh",
+              "/root/acceptance-update-db.sh",
+              "mysqldump --defaults-extra-file=/root/.my.cnf --set-gtid-purged=OFF --add-drop-table --no-tablespaces erp_production > /root/erp_fresh.sql",
+              "mysql --defaults-extra-file=/root/.my.cnf -e \"DROP DATABASE IF EXISTS erp_temp; CREATE DATABASE erp_temp CHARACTER SET utf8mb4\"",
+              "mysql --defaults-extra-file=/root/.my.cnf erp_temp < /root/erp_fresh.sql",
+              "docker cp ${{ env.CONTAINER_NAME }}:/var/www/html/etc/scrumble-db.sql ~",
+              "mysql --defaults-extra-file=/root/.my.cnf erp_temp < /root/scrumble-db.sql",
+              "mysqldump --defaults-extra-file=/root/.my.cnf --set-gtid-purged=OFF --add-drop-table --no-tablespaces erp_temp > /root/erp_scrambled.sql",
+              "mysql --defaults-extra-file=/root/.my.cnf -e \"DROP DATABASE IF EXISTS erp_acceptance; CREATE DATABASE erp_acceptance CHARACTER SET utf8mb4\"",
+              "mysql --defaults-extra-file=/root/.my.cnf erp_acceptance < /root/erp_scrambled.sql",
+              "rm -f .my.cnf",
+              "rm -f acceptance-update-db.sh",
+              "rm -f scrumble-db.sql",
+              "rm -f erp_fresh.sql",
+              "rm -f erp_scrambled.sql"
+            ]' --query 'Command.CommandId' --output text)
+          
+          echo "recreate_command_id=$command_id" >> $GITHUB_ENV
+
+      - name: Check recreate acc DB
+        uses: ./.github/actions/check-command
+        with:
+          instance_id: "${{ env.PROD_INSTANCE_ID }}"
+          command_id: "${{ env.recreate_command_id }}"
+
+      - name: Run migrations
+        run: |
+          command_id=$(aws ssm send-command \
+            --instance-ids "${{ env.ACC_INSTANCE_ID }}" \
+            --document-name "AWS-RunShellScript" \
+            --comment "Run migrations" \
+            --parameters commands='[
+              "docker exec ${{ env.CONTAINER_NAME }} sh -c \"php /var/www/html/bin/console d:m:m --no-interaction\""
+            ]' --query 'Command.CommandId' --output text)
+
+          echo "migrations_command_id=$command_id" >> $GITHUB_ENV
+
+      - name: Check migrations command status
+        uses: ./.github/actions/check-command
+        with:
+          instance_id: "${{ env.ACC_INSTANCE_ID }}"
+          command_id: "${{ env.migrations_command_id }}"
+

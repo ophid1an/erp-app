@@ -1,0 +1,113 @@
+name: Check pull request
+
+on:
+  pull_request
+
+jobs:
+  build-php-image:
+    name: Build-php-image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Make Docker cache directory
+        run: mkdir -p /tmp/.docker-cache
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.docker-cache/php
+          key: ${{ runner.os }}-docker-${{ hashFiles('Dockerfile.php', 'composer.lock') }}
+          restore-keys: ${{ runner.os }}-docker-
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and export erp-php
+        uses: docker/build-push-action@v6
+        with:
+          tags: erp-php
+          outputs: type=docker,dest=/tmp/erp-php.tar
+          file: Dockerfile.php
+          cache-from: type=local,src=/tmp/.docker-cache/php
+          cache-to: type=local,dest=/tmp/.docker-cache/php,mode=max
+          target: dev
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: erp-php
+          path: /tmp/erp-php.tar
+    
+  build-node-image:
+    name: Build-node-image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Make Docker cache directory
+        run: mkdir -p /tmp/.docker-cache
+
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.docker-cache/node
+          key: ${{ runner.os }}-docker-${{ hashFiles('Dockerfile.node', 'package-lock.json') }}
+          restore-keys: ${{ runner.os }}-docker-
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and export erp-node
+        uses: docker/build-push-action@v6
+        with:
+          tags: erp-node
+          outputs: type=docker,dest=/tmp/erp-node.tar
+          file: Dockerfile.node
+          cache-from: type=local,src=/tmp/.docker-cache/node
+          cache-to: type=local,dest=/tmp/.docker-cache/node,mode=max
+          target: dev
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: erp-node
+          path: /tmp/erp-node.tar
+
+
+  audit-php-image:
+    needs: build-php-image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: erp-php
+          path: /tmp
+
+      - name: Load image
+        run: |
+          docker load --input /tmp/erp-php.tar
+
+      - name: Run PHPStan
+        run: docker run --rm erp-php php -d memory_limit=1G vendor/bin/phpstan
+
+      - name: Audit composer
+        run: docker run --rm erp-php composer audit
+
+  audit-node-image:
+    needs: build-node-image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: erp-node
+          path: /tmp
+
+      - name: Load image
+        run: |
+          docker load --input /tmp/erp-node.tar
+
+      - name: Audit npm
+        run: docker run --rm erp-node npm audit --omit dev --audit-level=high

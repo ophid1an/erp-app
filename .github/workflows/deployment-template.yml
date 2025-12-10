@@ -1,0 +1,118 @@
+name: Deployment Template
+
+on:
+  workflow_call:
+    inputs:
+      instance_id:
+        description: 'Instance ID'
+        required: true
+        type: string
+
+env:
+  AWS_REGION: "eu-west-3"
+  AWS_ROLE: "arn:aws:iam::542189061124:role/GithubErpDeployer"
+  DOCKER_REPO: "thanpa/codeseed-erp"
+  CONTAINER_NAME: "erp-server"
+
+permissions:
+  id-token: write 
+  contents: read 
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - name: Setting and updating Base Environment Variables
+        run: |
+          echo "Create image with sha as tag"
+          echo "IMAGE_TO_DEPLOY=$DOCKER_REPO:${{ github.sha }}" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_ROLE }}
+          role-session-name: DeployERPSession
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Build image and push to Docker hub
+        run: |
+          echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USER }} --password-stdin
+          docker pull ${{ env.DOCKER_REPO }}:latest || echo "No existing latest image to use as cache"
+          export DOCKER_BUILDKIT=1
+          docker build --target prod \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            --cache-from ${{ env.DOCKER_REPO }}:latest \
+            -t ${{ env.IMAGE_TO_DEPLOY }} \
+            -t ${{ env.DOCKER_REPO }}:latest \
+            -f Dockerfile.php .
+          docker push ${{ env.IMAGE_TO_DEPLOY }}
+          docker push ${{ env.DOCKER_REPO }}:latest
+
+      - name: Execute Docker Commands on AWS Instance to deploy the application
+        run: |
+          command_id=$(aws ssm send-command \
+            --instance-ids "${{ inputs.instance_id }}" \
+            --document-name "AWS-RunShellScript" \
+            --comment "Executing Docker operations" \
+            --parameters commands='[
+              "set -e",
+              "trap '\''echo DOCKER_LOGIN_FAILURE 1>&2; echo \"Exit code: $?\"'\'' ERR; echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USER }} --password-stdin",
+              "trap '\''echo DOCKER_PULL_FAILURE 1>&2; echo \"Exit code: $?\"'\'' ERR; docker pull ${{ env.IMAGE_TO_DEPLOY }}",
+              "trap '\''echo DOCKER_STOP_FAILURE 1>&2; echo \"Exit code: $?\"'\'' ERR; if docker ps --format '\''{{.Names}}'\'' | grep -q ${{ env.CONTAINER_NAME }}; then docker stop ${{ env.CONTAINER_NAME }} && docker rm ${{ env.CONTAINER_NAME }}; fi",
+              "trap '\''echo DOCKER_RUN_FAILURE 1>&2; echo \"Exit code: $?\"'\'' ERR; docker run -p 80:80 -p 443:443 --restart unless-stopped --name ${{ env.CONTAINER_NAME }} -v \"/home/ec2-user/.env.local:/var/www/html/.env.local\" -v \"/mnt/erp_files/ssl:/var/www/html/ssl\" -v \"/mnt/erp_files/certbot_www/:/var/www/certbot/\" -d ${{ env.IMAGE_TO_DEPLOY }}"
+            ]' --query 'Command.CommandId' --output text)
+
+          echo "command_id=$command_id" >> $GITHUB_ENV
+   
+      - name: Check command status
+        uses: ./.github/actions/check-command
+        with:
+          instance_id: "${{ inputs.instance_id }}"
+          command_id: "${{ env.command_id }}"
+
+      - name: Run Migrations
+        run: |
+            migrations_command_id=$(aws ssm send-command \
+              --instance-ids ${{ inputs.instance_id }} \
+              --document-name "AWS-RunShellScript" \
+              --comment "Run migrations" \
+              --parameters commands='[
+                "set -e",
+                "trap '\''echo MIGRATION_UPDATE_FAILURE 1>&2; echo \"Exit code: $?\"'\'' ERR; docker exec ${{ env.CONTAINER_NAME }} sh -c \"php /var/www/html/bin/console d:m:m --no-interaction\""
+              ]' --query 'Command.CommandId' --output text)
+
+            echo "migrations_command_id=$migrations_command_id" >> $GITHUB_ENV
+
+      - name: Check command status
+        uses: ./.github/actions/check-command
+        with:
+          instance_id: "${{ inputs.instance_id }}"
+          command_id: "${{ env.migrations_command_id }}"
+
+      - name: Remove Old Container
+        if: always()
+        run: |
+          remove_old_command_id=$(aws ssm send-command \
+            --instance-ids ${{ inputs.instance_id }} \
+            --document-name "AWS-RunShellScript" \
+            --comment "Remove old Docker containers and images" \
+            --parameters commands='[
+              "set -e",
+              "trap '\''echo DOCKER_RM_FAILURE 1>&2'\'' ERR; docker container prune --force",
+              "trap '\''echo DOCKER_IMAGE_RM_FAILURE 1>&2'\'' ERR; docker image prune --all --force"
+            ]' --query 'Command.CommandId' --output text)
+
+            echo "remove_old_command_id=$remove_old_command_id" >> $GITHUB_ENV
+
+      - name: Check command status
+        if: always()
+        uses: ./.github/actions/check-command
+        with:
+          instance_id: "${{ inputs.instance_id }}"
+          command_id: "${{ env.remove_old_command_id }}"
