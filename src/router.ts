@@ -34,6 +34,8 @@ import Vacancies from './views/Vacancies.vue'
 import Statistics from './views/Statistics.vue'
 import Metrics from './views/Metrics.vue'
 import Marketplace from './views/Marketplace.vue'
+import ApiDocs from './views/ApiDocs.vue'
+import ChangePassword from './views/ChangePassword.vue'
 
 const routes = [
   {
@@ -195,6 +197,16 @@ const routes = [
     path: '/marketplace',
     name: 'marketplace',
     component: Marketplace,
+  },
+  {
+    path: '/api-docs',
+    name: 'api-docs',
+    component: ApiDocs,
+  },
+  {
+    path: '/change-password',
+    name: 'change-password',
+    component: ChangePassword,
   },
   {
     path: '/login',

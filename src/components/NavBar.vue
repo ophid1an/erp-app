@@ -4,7 +4,7 @@ import Button from './ui/Button.vue'
 
 <template>
   <header class="sticky top-0 z-20 border-b border-slate-200 bg-white/80 backdrop-blur">
-    <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
       <div class="flex items-center gap-3">
         <img
           src="https://codeseed.gr/wp-content/uploads/2021/05/logo-codeseed.svg"
@@ -17,7 +17,7 @@ import Button from './ui/Button.vue'
         </div>
       </div>
 
-      <nav class="hidden items-center gap-3 text-sm font-semibold text-slate-700 sm:flex">
+      <nav class="flex w-full flex-wrap items-center gap-3 overflow-x-auto text-sm font-semibold text-slate-700 sm:flex">
         <RouterLink to="/" class="hover:text-teal-600">Dashboard</RouterLink>
         <RouterLink to="/transactions" class="hover:text-teal-600">Transactions</RouterLink>
         <RouterLink to="/invoices" class="hover:text-teal-600">Invoices</RouterLink>
@@ -49,6 +49,8 @@ import Button from './ui/Button.vue'
         <RouterLink to="/static-files" class="hover:text-teal-600">Static files</RouterLink>
         <RouterLink to="/commands" class="hover:text-teal-600">Commands</RouterLink>
         <RouterLink to="/settings" class="hover:text-teal-600">Settings</RouterLink>
+        <RouterLink to="/api-docs" class="hover:text-teal-600">API docs</RouterLink>
+        <RouterLink to="/change-password" class="hover:text-teal-600">Change password</RouterLink>
         <RouterLink to="/menu" class="hover:text-teal-600">Menu</RouterLink>
         <RouterLink to="/employees" class="hover:text-teal-600">Employees</RouterLink>
         <RouterLink to="/login" class="hover:text-teal-600">Login</RouterLink>
