@@ -5,6 +5,8 @@ import ResetPassword from './views/ResetPassword.vue'
 import EmployeesList from './views/EmployeesList.vue'
 import Dashboard from './views/Dashboard.vue'
 import TransactionsList from './views/TransactionsList.vue'
+import ClientsList from './views/ClientsList.vue'
+import InvoicesList from './views/InvoicesList.vue'
 
 const routes = [
   {
@@ -21,6 +23,16 @@ const routes = [
     path: '/transactions',
     name: 'transactions',
     component: TransactionsList,
+  },
+  {
+    path: '/invoices',
+    name: 'invoices',
+    component: InvoicesList,
+  },
+  {
+    path: '/clients',
+    name: 'clients',
+    component: ClientsList,
   },
   {
     path: '/login',
