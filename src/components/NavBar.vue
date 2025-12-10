@@ -73,7 +73,16 @@ const navGroups = [
 ]
 
 const isExpanded = ref(true)
+const openGroup = ref<string | null>(null)
 const flatLinks = computed(() => navGroups.flatMap((group) => group.links))
+
+const toggleGroup = (label: string) => {
+  openGroup.value = openGroup.value === label ? null : label
+}
+
+const closeDropdowns = () => {
+  openGroup.value = null
+}
 </script>
 
 <template>
@@ -137,9 +146,10 @@ const flatLinks = computed(() => navGroups.flatMap((group) => group.links))
             :key="group.label"
             class="rounded-lg border border-slate-200 bg-white shadow-sm transition hover:border-teal-200"
           >
-            <details class="group relative overflow-visible open:shadow-md">
+            <details class="group relative overflow-visible open:shadow-md" :open="openGroup === group.label">
               <summary
                 class="flex cursor-pointer items-center justify-between gap-2 px-3 py-2 text-sm font-semibold text-slate-800 transition group-open:text-teal-700"
+                @click.prevent="toggleGroup(group.label)"
               >
                 <span>{{ group.label }}</span>
                 <svg
@@ -163,6 +173,7 @@ const flatLinks = computed(() => navGroups.flatMap((group) => group.links))
                     v-for="link in group.links"
                     :key="link.to"
                     :to="link.to"
+                    @click="closeDropdowns"
                     class="rounded-md px-2 py-1 transition hover:bg-teal-50 hover:text-teal-700"
                   >
                     {{ link.label }}
