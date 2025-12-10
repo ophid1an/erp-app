@@ -11,6 +11,12 @@ import ExpensesList from './views/ExpensesList.vue'
 import SuppliersList from './views/SuppliersList.vue'
 import Payroll from './views/Payroll.vue'
 import Reports from './views/Reports.vue'
+import Worklog from './views/Worklog.vue'
+import Assets from './views/Assets.vue'
+import Trips from './views/Trips.vue'
+import StaticFiles from './views/StaticFiles.vue'
+import Commands from './views/Commands.vue'
+import Settings from './views/Settings.vue'
 
 const routes = [
   {
@@ -57,6 +63,36 @@ const routes = [
     path: '/reports',
     name: 'reports',
     component: Reports,
+  },
+  {
+    path: '/worklog',
+    name: 'worklog',
+    component: Worklog,
+  },
+  {
+    path: '/assets',
+    name: 'assets',
+    component: Assets,
+  },
+  {
+    path: '/trips',
+    name: 'trips',
+    component: Trips,
+  },
+  {
+    path: '/static-files',
+    name: 'static-files',
+    component: StaticFiles,
+  },
+  {
+    path: '/commands',
+    name: 'commands',
+    component: Commands,
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: Settings,
   },
   {
     path: '/login',
