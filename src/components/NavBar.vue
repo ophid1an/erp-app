@@ -78,12 +78,12 @@ const flatLinks = computed(() => navGroups.flatMap((group) => group.links))
 
 <template>
   <header class="sticky top-0 z-20 border-b border-slate-200 bg-white/80 backdrop-blur">
-    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
+    <div class="flex flex-col max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
       <div class="flex items-center gap-3">
         <img src="../assets/codeseed-logo-dark.svg" alt="Codeseed logo" class="h-8 w-auto" />
       </div>
 
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 flex-row-reverse sm:flex-row justify-center">
         <Button as="a" variant="outline" size="sm" href="/login">Sign in</Button>
         <Button as="a" size="sm" href="/employees">Employees</Button>
         <div class="flex w-full flex-col gap-3">
