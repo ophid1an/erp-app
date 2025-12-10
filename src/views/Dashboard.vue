@@ -13,7 +13,11 @@ const kpis = [
 const shortcuts = [
   { title: 'Create invoice', description: 'Draft a new customer invoice', cta: 'New invoice' },
   { title: 'Log transaction', description: 'Record a payment or expense', cta: 'Add transaction' },
-  { title: 'Export reports', description: 'Monthly statements and tax exports', cta: 'Open exports' },
+  {
+    title: 'Export reports',
+    description: 'Monthly statements and tax exports',
+    cta: 'Open exports',
+  },
 ]
 
 const graphBars = [
@@ -30,11 +34,6 @@ const graphBars = [
 <template>
   <section class="space-y-6">
     <div class="flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">Overview</p>
-        <h1 class="text-3xl font-bold text-slate-900">Dashboard</h1>
-        <p class="text-slate-600">High-level financial and workforce signals.</p>
-      </div>
       <div class="flex gap-2">
         <Button variant="outline" size="sm">Download report</Button>
         <Button size="sm">Create invoice</Button>
@@ -43,7 +42,9 @@ const graphBars = [
 
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <Card v-for="kpi in kpis" :key="kpi.label" class="p-4 space-y-2">
-        <p class="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">{{ kpi.label }}</p>
+        <p class="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
+          {{ kpi.label }}
+        </p>
         <p class="text-2xl font-bold text-slate-900">{{ kpi.value }}</p>
         <p class="text-sm text-emerald-600">{{ kpi.change }}</p>
       </Card>
@@ -53,7 +54,9 @@ const graphBars = [
       <Card class="p-4 lg:col-span-2">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">Cash flow</p>
+            <p class="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
+              Cash flow
+            </p>
             <h2 class="text-lg font-semibold text-slate-900">This week</h2>
           </div>
           <Badge>Live</Badge>
@@ -77,13 +80,6 @@ const graphBars = [
       </Card>
 
       <Card class="p-4 space-y-3">
-        <div class="flex items-start justify-between">
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">Shortcuts</p>
-            <h2 class="text-lg font-semibold text-slate-900">Quick actions</h2>
-          </div>
-        </div>
-
         <div class="space-y-3">
           <div
             v-for="item in shortcuts"
@@ -92,7 +88,9 @@ const graphBars = [
           >
             <p class="text-sm font-semibold text-slate-900">{{ item.title }}</p>
             <p class="text-xs text-slate-600">{{ item.description }}</p>
-            <Button variant="ghost" size="sm" class="mt-2 px-0 text-teal-600">{{ item.cta }}</Button>
+            <Button variant="ghost" size="sm" class="mt-2 px-0 text-teal-600">{{
+              item.cta
+            }}</Button>
           </div>
         </div>
       </Card>
