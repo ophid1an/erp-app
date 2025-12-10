@@ -9,6 +9,7 @@ jobs:
   deployment-template:
     uses: ./.github/workflows/deployment-template.yml
     with:
+      environment_name: "production"
       instance_id: "i-07610f7d64ec5ea17"  # PROD instance ID
     secrets: inherit
 

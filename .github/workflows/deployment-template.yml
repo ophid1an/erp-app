@@ -7,6 +7,11 @@ on:
         description: 'Instance ID'
         required: true
         type: string
+      environment_name:
+        description: 'GitHub Environment name (e.g., production, acceptance)'
+        required: false
+        type: string
+        default: production
 
 env:
   AWS_REGION: "eu-west-3"
@@ -18,11 +23,15 @@ permissions:
   id-token: write 
   contents: read 
 
+concurrency:
+  group: deploy-${{ inputs.environment_name || 'production' }}
+  cancel-in-progress: true
+
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: ${{ inputs.environment_name || 'production' }}
 
     steps:
       - name: Setting and updating Base Environment Variables
