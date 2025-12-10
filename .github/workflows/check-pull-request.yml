@@ -49,6 +49,27 @@ jobs:
         if: steps.changed.outputs.changed_files == ''
         run: echo "Skipping Prettier check; no matching files changed."
 
+      - name: Summarize Prettier result
+        if: always()
+        run: |
+          {
+            echo "### Prettier status"
+            if [ "${{ steps.changed.outputs.changed_files }}" = "" ]; then
+              echo "- Skipped: no matching files changed."
+            else
+              if [ "${{ job.status }}" = "success" ]; then
+                echo "- ✅ Passed on changed files."
+              else
+                echo "- ❌ Failed. Run \`npm run prettier:write\` locally."
+              fi
+              echo ""
+              echo "Changed files checked:"
+              echo '```'
+              printf '%s\n' "${{ steps.changed.outputs.changed_files }}"
+              echo '```'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
   build-php-image:
     name: Build-php-image
     runs-on: ubuntu-latest
