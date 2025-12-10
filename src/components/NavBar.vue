@@ -72,7 +72,7 @@ const navGroups = [
   },
 ]
 
-const isExpanded = ref(false)
+const isExpanded = ref(true)
 const flatLinks = computed(() => navGroups.flatMap((group) => group.links))
 </script>
 
