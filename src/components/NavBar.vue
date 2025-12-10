@@ -86,35 +86,34 @@ const flatLinks = computed(() => navGroups.flatMap((group) => group.links))
       <div class="flex items-center gap-2 flex-row-reverse sm:flex-row justify-center">
         <Button as="a" variant="outline" size="sm" href="/login">Sign in</Button>
         <Button as="a" size="sm" href="/employees">Employees</Button>
-        <div class="flex w-full flex-col gap-3">
-          <div class="flex flex-row-reverse items-center justify-between gap-3">
-            <button
-              type="button"
-              class="inline-flex h-9 w-9 items-center justify-center border-slate-200 bg-white text-slate-700 shadow-sm transition hover:border-teal-200 hover:text-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              @click="isExpanded = !isExpanded"
-              :aria-label="isExpanded ? 'Collapse menu' : 'Expand all'"
+        <div class="flex flex-row-reverse items-center justify-between gap-3">
+          <button
+            type="button"
+            class="inline-flex h-9 w-9 items-center justify-center border-slate-200 bg-white text-slate-700 shadow-sm transition hover:border-teal-200 hover:text-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            @click="isExpanded = !isExpanded"
+            :aria-label="isExpanded ? 'Collapse menu' : 'Expand all'"
+          >
+            <svg
+              class="h-4 w-4 transition"
+              :class="isExpanded ? 'rotate-180 text-teal-600' : 'text-slate-500'"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
             >
-              <svg
-                class="h-4 w-4 transition"
-                :class="isExpanded ? 'rotate-180 text-teal-600' : 'text-slate-500'"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 3a1 1 0 01.707.293l5 5a1 1 0 01-1.414 1.414L10 5.414 5.707 9.707A1 1 0 014.293 8.293l5-5A1 1 0 0110 3z"
-                  clip-rule="evenodd"
-                />
-                <path
-                  fill-rule="evenodd"
-                  d="M10 11a1 1 0 01.707.293l5 5a1 1 0 01-1.414 1.414L10 13.414l-4.293 4.293A1 1 0 014.293 15.293l5-5A1 1 0 0110 11z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
-
+              <path
+                fill-rule="evenodd"
+                d="M10 3a1 1 0 01.707.293l5 5a1 1 0 01-1.414 1.414L10 5.414 5.707 9.707A1 1 0 014.293 8.293l5-5A1 1 0 0110 3z"
+                clip-rule="evenodd"
+              />
+              <path
+                fill-rule="evenodd"
+                d="M10 11a1 1 0 01.707.293l5 5a1 1 0 01-1.414 1.414L10 13.414l-4.293 4.293A1 1 0 014.293 15.293l5-5A1 1 0 0110 11z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+        <div class="flex w-full flex-col gap-3">
           <nav
             v-if="isExpanded"
             class="flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-700"
