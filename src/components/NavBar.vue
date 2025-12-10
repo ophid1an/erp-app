@@ -7,7 +7,7 @@ import Button from './ui/Button.vue'
     <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
       <div class="flex items-center gap-3">
         <img
-          src="images.ctfassets.net/ynb9m39kb3he/5CczP1UeHItbQPNjd5hzBu/7739fe9c4fb340323c941583dd778695/codeseed-logo-dark.svg"
+          src="codeseed-logo-dark.svg"
           alt="Codeseed logo"
           class="h-8 w-auto"
         />
