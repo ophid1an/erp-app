@@ -7,6 +7,10 @@ import Dashboard from './views/Dashboard.vue'
 import TransactionsList from './views/TransactionsList.vue'
 import ClientsList from './views/ClientsList.vue'
 import InvoicesList from './views/InvoicesList.vue'
+import ExpensesList from './views/ExpensesList.vue'
+import SuppliersList from './views/SuppliersList.vue'
+import Payroll from './views/Payroll.vue'
+import Reports from './views/Reports.vue'
 
 const routes = [
   {
@@ -33,6 +37,26 @@ const routes = [
     path: '/clients',
     name: 'clients',
     component: ClientsList,
+  },
+  {
+    path: '/expenses',
+    name: 'expenses',
+    component: ExpensesList,
+  },
+  {
+    path: '/suppliers',
+    name: 'suppliers',
+    component: SuppliersList,
+  },
+  {
+    path: '/payroll',
+    name: 'payroll',
+    component: Payroll,
+  },
+  {
+    path: '/reports',
+    name: 'reports',
+    component: Reports,
   },
   {
     path: '/login',

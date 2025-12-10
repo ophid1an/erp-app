@@ -20,6 +20,10 @@ import Button from './ui/Button.vue'
         <RouterLink to="/transactions" class="hover:text-indigo-600">Transactions</RouterLink>
         <RouterLink to="/invoices" class="hover:text-indigo-600">Invoices</RouterLink>
         <RouterLink to="/clients" class="hover:text-indigo-600">Clients</RouterLink>
+        <RouterLink to="/expenses" class="hover:text-indigo-600">Expenses</RouterLink>
+        <RouterLink to="/suppliers" class="hover:text-indigo-600">Suppliers</RouterLink>
+        <RouterLink to="/payroll" class="hover:text-indigo-600">Payroll</RouterLink>
+        <RouterLink to="/reports" class="hover:text-indigo-600">Reports</RouterLink>
         <RouterLink to="/menu" class="hover:text-indigo-600">Menu</RouterLink>
         <RouterLink to="/employees" class="hover:text-indigo-600">Employees</RouterLink>
         <RouterLink to="/login" class="hover:text-indigo-600">Login</RouterLink>
