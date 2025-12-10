@@ -16,7 +16,9 @@ import Button from './ui/Button.vue'
       </div>
 
       <nav class="hidden items-center gap-3 text-sm font-semibold text-slate-700 sm:flex">
-        <RouterLink to="/" class="hover:text-indigo-600">Menu</RouterLink>
+        <RouterLink to="/" class="hover:text-indigo-600">Dashboard</RouterLink>
+        <RouterLink to="/transactions" class="hover:text-indigo-600">Transactions</RouterLink>
+        <RouterLink to="/menu" class="hover:text-indigo-600">Menu</RouterLink>
         <RouterLink to="/employees" class="hover:text-indigo-600">Employees</RouterLink>
         <RouterLink to="/login" class="hover:text-indigo-600">Login</RouterLink>
         <RouterLink to="/reset" class="hover:text-indigo-600">Reset</RouterLink>
