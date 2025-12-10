@@ -26,6 +26,14 @@ import Accounts from './views/Accounts.vue'
 import YearOverview from './views/YearOverview.vue'
 import Tax from './views/Tax.vue'
 import Loans from './views/Loans.vue'
+import LeaveBook from './views/LeaveBook.vue'
+import PTBoard from './views/PTBoard.vue'
+import OfficePresence from './views/OfficePresence.vue'
+import RandomPick from './views/RandomPick.vue'
+import Vacancies from './views/Vacancies.vue'
+import Statistics from './views/Statistics.vue'
+import Metrics from './views/Metrics.vue'
+import Marketplace from './views/Marketplace.vue'
 
 const routes = [
   {
@@ -147,6 +155,46 @@ const routes = [
     path: '/loans',
     name: 'loans',
     component: Loans,
+  },
+  {
+    path: '/leave-book',
+    name: 'leave-book',
+    component: LeaveBook,
+  },
+  {
+    path: '/pt-board',
+    name: 'pt-board',
+    component: PTBoard,
+  },
+  {
+    path: '/office',
+    name: 'office',
+    component: OfficePresence,
+  },
+  {
+    path: '/random-pick',
+    name: 'random-pick',
+    component: RandomPick,
+  },
+  {
+    path: '/vacancies',
+    name: 'vacancies',
+    component: Vacancies,
+  },
+  {
+    path: '/statistics',
+    name: 'statistics',
+    component: Statistics,
+  },
+  {
+    path: '/metrics',
+    name: 'metrics',
+    component: Metrics,
+  },
+  {
+    path: '/marketplace',
+    name: 'marketplace',
+    component: Marketplace,
   },
   {
     path: '/login',

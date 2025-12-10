@@ -38,6 +38,14 @@ import Button from './ui/Button.vue'
         <RouterLink to="/worklog" class="hover:text-teal-600">Worklog</RouterLink>
         <RouterLink to="/assets" class="hover:text-teal-600">Assets</RouterLink>
         <RouterLink to="/trips" class="hover:text-teal-600">Trips</RouterLink>
+        <RouterLink to="/leave-book" class="hover:text-teal-600">Leave book</RouterLink>
+        <RouterLink to="/pt-board" class="hover:text-teal-600">PT Board</RouterLink>
+        <RouterLink to="/office" class="hover:text-teal-600">Office</RouterLink>
+        <RouterLink to="/random-pick" class="hover:text-teal-600">Random pick</RouterLink>
+        <RouterLink to="/vacancies" class="hover:text-teal-600">Vacancies</RouterLink>
+        <RouterLink to="/statistics" class="hover:text-teal-600">Statistics</RouterLink>
+        <RouterLink to="/metrics" class="hover:text-teal-600">Metrics</RouterLink>
+        <RouterLink to="/marketplace" class="hover:text-teal-600">Marketplace</RouterLink>
         <RouterLink to="/static-files" class="hover:text-teal-600">Static files</RouterLink>
         <RouterLink to="/commands" class="hover:text-teal-600">Commands</RouterLink>
         <RouterLink to="/settings" class="hover:text-teal-600">Settings</RouterLink>
