@@ -26,15 +26,17 @@ jobs:
         id: changed
         run: |
           git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
-          FILES=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...${{ github.event.pull_request.head.sha }} -- 'src/**/*.{ts,js,vue,css,md,json}' '*.json' '*.md' '*.prettierrc' '.prettierrc.*' '.github/**/*.yml' '.github/**/*.yaml')
-          if [ -z "$FILES" ]; then
+          mapfile -t FILES < <(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...${{ github.event.pull_request.head.sha }} -- \
+            'src/**/*.{ts,js,vue,css,md,json}' '*.json' '*.md' '*.prettierrc' '.prettierrc.*' '.github/**/*.yml' '.github/**/*.yaml')
+          if [ ${#FILES[@]} -eq 0 ]; then
             echo "No relevant files changed."
             echo "changed_files=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          printf '%s\n' "${FILES[@]}" > changed_files.txt
           {
             echo "changed_files<<EOF"
-            echo "$FILES"
+            printf '%s\n' "${FILES[@]}"
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
@@ -44,13 +46,15 @@ jobs:
         continue-on-error: true
         run: |
           echo "Checking files:"
-          printf '%s\n' "${{ steps.changed.outputs.changed_files }}"
-          npx prettier --check ${{ steps.changed.outputs.changed_files }}
+          cat changed_files.txt
+          mapfile -t FILES < changed_files.txt
+          npx prettier --check "${FILES[@]}"
 
       - name: Generate Prettier patch (on failure)
         if: steps.changed.outputs.changed_files != '' && steps.prettier_check.outcome == 'failure'
         run: |
-          npx prettier --write ${{ steps.changed.outputs.changed_files }}
+          mapfile -t FILES < changed_files.txt
+          npx prettier --write "${FILES[@]}"
           git diff --patch > prettier-fixes.patch
           echo "patch_path=prettier-fixes.patch" >> "$GITHUB_ENV"
 

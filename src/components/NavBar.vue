@@ -72,7 +72,7 @@ const navGroups = [
   },
 ]
 
-const isExpanded = ref(true)
+const isExpanded = ref(false)
 const flatLinks = computed(() => navGroups.flatMap((group) => group.links))
 </script>
 
@@ -80,11 +80,12 @@ const flatLinks = computed(() => navGroups.flatMap((group) => group.links))
   <header class="sticky top-0 z-20 border-b border-slate-200 bg-white/80 backdrop-blur">
     <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
       <div class="flex items-center gap-3">
-        <img
-          src="../assets/codeseed-logo-dark.svg"
-          alt="Codeseed logo"
-          class="h-8 w-auto"
-        />
+        <img src="../assets/codeseed-logo-dark.svg" alt="Codeseed logo" class="h-8 w-auto" />
+      </div>
+
+      <div class="flex items-center gap-2">
+        <Button as="a" variant="outline" size="sm" href="/login">Sign in</Button>
+        <Button as="a" size="sm" href="/employees">Employees</Button>
       </div>
 
       <div class="flex w-full flex-col gap-3">
@@ -116,7 +117,10 @@ const flatLinks = computed(() => navGroups.flatMap((group) => group.links))
           </button>
         </div>
 
-        <nav v-if="isExpanded" class="flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-700">
+        <nav
+          v-if="isExpanded"
+          class="flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-700"
+        >
           <RouterLink
             v-for="link in flatLinks"
             :key="link.to"
@@ -151,7 +155,9 @@ const flatLinks = computed(() => navGroups.flatMap((group) => group.links))
                   />
                 </svg>
               </summary>
-              <div class="absolute left-0 right-0 top-full z-30 hidden rounded-lg border border-slate-200 bg-white shadow-xl ring-1 ring-black/5 group-open:block">
+              <div
+                class="absolute left-0 right-0 top-full z-30 hidden rounded-lg border border-slate-200 bg-white shadow-xl ring-1 ring-black/5 group-open:block"
+              >
                 <div class="flex flex-col gap-1 px-3 py-3 text-sm font-semibold text-slate-700">
                   <RouterLink
                     v-for="link in group.links"
@@ -166,11 +172,6 @@ const flatLinks = computed(() => navGroups.flatMap((group) => group.links))
             </details>
           </section>
         </div>
-      </div>
-
-      <div class="flex items-center gap-2">
-        <Button as="a" variant="outline" size="sm" href="/login">Sign in</Button>
-        <Button as="a" size="sm" href="/employees">Employees</Button>
       </div>
     </div>
   </header>
